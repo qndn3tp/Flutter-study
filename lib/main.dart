@@ -21,7 +21,35 @@ class _MyAppState extends State<MyApp> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return  AlertDialog(
+                  title: Text("Contact"),
+                  content: TextField(),
+                  actions: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                        ),
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: (){
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                );
+              });
+        },
       ),
       appBar: AppBar(title: Text("연락처앱"),),
       body: ListView.builder(
