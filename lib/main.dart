@@ -23,6 +23,13 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context){
+                return DialogUI();
+              }
+          );
         },
       ),
       appBar: AppBar(title: Text("연락처앱"),),
@@ -30,18 +37,47 @@ class _MyAppState extends State<MyApp> {
           itemCount: 3,
           itemBuilder: (c, i){
             return ListTile(
-              leading: Text(like[i].toString()),
+              leading: Image.asset("assets/profile.png"),
               title: Text(name[i]),
-              trailing: ElevatedButton(child: Text("좋아요"),
-              onPressed: (){
-                setState(() {
-                  like[i]++;
-                });
-              }
-                ,),
             );
           }
       ),
+    );
+  }
+}
+
+// FAB 클릭 모달창 디자인
+class DialogUI extends StatefulWidget {
+  const DialogUI({super.key});
+
+  @override
+  State<DialogUI> createState() => _DialogUIState();
+}
+
+class _DialogUIState extends State<DialogUI> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("연락처"),
+      content: TextField(),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              child: Text("취소"),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text("완료"),
+              onPressed: (){
+              },
+            )
+          ],
+        )
+      ],
     );
   }
 }
