@@ -31,7 +31,12 @@ class _MyAppState extends State<MyApp> {
       name.add(string);
     });
   }
-
+  // 연락처를 리스트에서 삭제하는 함수
+  removeName(index) {
+    setState(() {
+      name.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,20 @@ class _MyAppState extends State<MyApp> {
             return ListTile(
               leading: Image.asset("assets/profile.png"),
               title: Text(name[i]),
+              trailing: TextButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Color(0xffE56A5D)),
+                        )
+                    )
+                ),
+                child: Text("삭제", style: TextStyle(color: Color(0xffE56A5D)),),
+                onPressed: () {
+                  removeName(i);
+                },
+              ),
             );
           }
       ),
