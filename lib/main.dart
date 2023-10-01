@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp( MaterialApp(
@@ -14,6 +15,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  // 권한을 받았는지 확인하는 함수
+  getPermission() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      print("허락됨");
+    } else if (status.isDenied) {
+      print("거절됨");
+      Permission.contacts.request();  // 허락해달라고 팝업을 띄움
+    }
+  }
 
   var total = 3;
   var name = ["김영숙", "홍길동", "피자집"];
@@ -53,7 +65,9 @@ class _MyAppState extends State<MyApp> {
           );
         },
       ),
-      appBar: AppBar(title: Text("연락처")),
+      appBar: AppBar(title: Text("연락처"),actions: [
+        IconButton(onPressed: (){ getPermission(); }, icon: Icon(Icons.contacts))
+      ],),
       body: ListView.builder(
           itemCount: name.length,
           itemBuilder: (c, i){
