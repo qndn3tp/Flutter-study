@@ -37,28 +37,20 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  var total = 3;
   var name = [];
   var like = [0, 0, 0];
 
-  // total을 1씩 증가시키는 함수
-  addOne() {
-    setState(() {
-      total++;
-    });
-  }
   // 모달창에서 입력한 이름을 추가하는 함수
-  addName(string) {
-    setState(() {
-      name.add(string);
-    });
+  addName(string) async {
+    // 실제 연락처에 추가
+    var newPerson = await Contact();
+    newPerson.givenName = string;
+    ContactsService.addContact(newPerson);
   }
+
   // 연락처를 리스트에서 삭제하는 함수
   removeName(index) {
-    setState(() {
-      name.removeAt(index);
-      ContactsService.deleteContact(name[index]);
-    });
+    ContactsService.deleteContact(name[index]);
   }
 
   @override
@@ -71,7 +63,7 @@ class _MyAppState extends State<MyApp> {
               context: context,
               barrierDismissible: false,
               builder: (context){
-                return DialogUI( addOne: addOne, addName: addName);
+                return DialogUI( addName: addName);
               }
           );
         },
@@ -108,14 +100,12 @@ class _MyAppState extends State<MyApp> {
 
 // FAB 클릭 모달창 디자인
 class DialogUI extends StatelessWidget {
-  DialogUI({super.key, this.addOne, this.addName});
+  DialogUI({super.key, this.addName});
 
-  final addOne;     // 부모위젯의 state인 total을 변경하는 함수
   var inputData = TextEditingController();  // 입력한 텍스트를 저장하기 위함
   final addName;
 
   @override
- // State<DialogUI> createState() => _DialogUIState();
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("연락처"),
