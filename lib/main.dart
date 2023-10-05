@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import "package:contacts_service/contacts_service.dart";
 
 void main() {
   runApp( MaterialApp(
@@ -19,8 +20,17 @@ class _MyAppState extends State<MyApp> {
   // 권한을 받았는지 확인하는 함수
   getPermission() async {
     var status = await Permission.contacts.status;
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
     if (status.isGranted) {
       print("허락됨");
+      var contacts = await ContactsService.getContacts();  // 실제 연락처 정보를 받아옴
+
+      setState(() {         // 받아온 연락처를 리스트(name)에 저장. state를 변경함
+        name = contacts;
+      });
+
     } else if (status.isDenied) {
       print("거절됨");
       Permission.contacts.request();  // 허락해달라고 팝업을 띄움
@@ -28,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   var total = 3;
-  var name = ["김영숙", "홍길동", "피자집"];
+  var name = [];
   var like = [0, 0, 0];
 
   // total을 1씩 증가시키는 함수
@@ -47,6 +57,7 @@ class _MyAppState extends State<MyApp> {
   removeName(index) {
     setState(() {
       name.removeAt(index);
+      ContactsService.deleteContact(name[index]);
     });
   }
 
@@ -73,7 +84,7 @@ class _MyAppState extends State<MyApp> {
           itemBuilder: (c, i){
             return ListTile(
               leading: Image.asset("assets/profile.png"),
-              title: Text(name[i]),
+              title: Text(name[i].displayName),
               trailing: TextButton(
                 style: ButtonStyle(
                     shape: MaterialStateProperty.all<OutlinedBorder>(
