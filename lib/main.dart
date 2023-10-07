@@ -33,18 +33,18 @@ class _MyAppState extends State<MyApp> {
 
     } else if (status.isDenied) {
       print("거절됨");
-      Permission.contacts.request();  // 허락해달라고 팝업을 띄움
+      Permission.contacts.request();  // 권한을 허락해달라고 팝업을 띄움
     }
   }
 
   var name = [];
-  var like = [0, 0, 0];
 
-  // 모달창에서 입력한 이름을 추가하는 함수
-  addName(string) async {
+  // 사용자 입력을 받아 연락처에 추가해주는 함수
+  addName(lastName, firstName, number) async {
     // 실제 연락처에 추가
     var newPerson = await Contact();
-    newPerson.givenName = string;
+    newPerson.familyName = lastName;
+    newPerson.givenName = firstName;
     ContactsService.addContact(newPerson);
   }
 
@@ -102,14 +102,41 @@ class _MyAppState extends State<MyApp> {
 class DialogUI extends StatelessWidget {
   DialogUI({super.key, this.addName});
 
-  var inputData = TextEditingController();  // 입력한 텍스트를 저장하기 위함
+  var inputData1 = TextEditingController();  // 입력한 텍스트를 저장하기 위함. Last Name 저장
+  var inputData2 = TextEditingController();  // First Name 저장
+  var inputData3 = TextEditingController();  // 전화번호 저장
   final addName;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("연락처"),
-      content: TextField( controller: inputData,),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text("  성  :"),
+              SizedBox( width: 10,),
+              Flexible(child: TextField( controller: inputData1,),)
+            ],
+          ),
+          Row(
+            children: [
+              Text("이름:"),
+              SizedBox( width: 10,),
+              Flexible(child: TextField( controller: inputData2,),)
+            ],
+          ),
+          // Row(
+          //   children: [
+          //     Text("번호:"),
+          //     SizedBox( width: 10,),
+          //     Flexible(child: TextField( controller: inputData3,),)
+          //   ],
+          // ),
+        ],
+      ),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -119,8 +146,10 @@ class DialogUI extends StatelessWidget {
             ),
             TextButton(
               child: Text("완료"), onPressed: (){
-                if (inputData.text.trim() != "") {  // 공백인 입력은 리스트에 추가 X
-                  addName(inputData.text);
+                if (inputData1.text.trim() != "") {  // 성과 이름이 모두 입력되면 연락처에 추가
+                  if (inputData2.text.trim() != "") {
+                      addName(inputData1.text, inputData2.text, inputData3);
+                  }
                 }
                 Navigator.pop(context);
                 },
