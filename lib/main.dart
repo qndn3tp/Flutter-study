@@ -45,6 +45,8 @@ class _MyAppState extends State<MyApp> {
     var newPerson = await Contact();
     newPerson.familyName = lastName;
     newPerson.givenName = firstName;
+    newPerson.phones = [ Item(label: "mobile", value: number) ];
+
     ContactsService.addContact(newPerson);
   }
 
@@ -128,13 +130,13 @@ class DialogUI extends StatelessWidget {
               Flexible(child: TextField( controller: inputData2,),)
             ],
           ),
-          // Row(
-          //   children: [
-          //     Text("번호:"),
-          //     SizedBox( width: 10,),
-          //     Flexible(child: TextField( controller: inputData3,),)
-          //   ],
-          // ),
+          Row(
+            children: [
+              Text("번호:"),
+              SizedBox( width: 10,),
+              Flexible(child: TextField( controller: inputData3,),)
+            ],
+          ),
         ],
       ),
       actions: [
@@ -146,13 +148,16 @@ class DialogUI extends StatelessWidget {
             ),
             TextButton(
               child: Text("완료"), onPressed: (){
-                if (inputData1.text.trim() != "") {  // 성과 이름이 모두 입력되면 연락처에 추가
-                  if (inputData2.text.trim() != "") {
-                      addName(inputData1.text, inputData2.text, inputData3);
+              // 성, 이름, 번호가 모두 입력되면 연락처에 추가
+              if (inputData1.text.trim() != "") {
+                if (inputData2.text.trim() != "") {
+                  if (inputData3.text.trim() != "") {
+                    addName(inputData1.text, inputData2.text, inputData3.text);
                   }
                 }
-                Navigator.pop(context);
-                },
+              }
+              Navigator.pop(context);
+            },
             )
           ],
         )
