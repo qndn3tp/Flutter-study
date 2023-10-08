@@ -19,13 +19,13 @@ class _MyAppState extends State<MyApp> {
 
   // 권한을 받았는지 확인하는 함수
   getPermission() async {
-    var status = await Permission.contacts.status;
+    PermissionStatus status = await Permission.contacts.status;
     if (status.isPermanentlyDenied) {
       openAppSettings();
     }
     if (status.isGranted) {
       print("허락됨");
-      var contacts = await ContactsService.getContacts();  // 실제 연락처 정보를 받아옴
+      List<Contact> contacts = await ContactsService.getContacts();  // 실제 연락처 정보를 받아옴
 
       setState(() {         // 받아온 연락처를 리스트(name)에 저장. state를 변경함
         name = contacts;
@@ -37,12 +37,12 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  var name = [];
+  List<Contact> name = [];
 
   // 사용자 입력을 받아 연락처에 추가해주는 함수
   addName(lastName, firstName, number) async {
     // 실제 연락처에 추가
-    var newPerson = await Contact();
+    Contact newPerson = await Contact();
     newPerson.familyName = lastName;
     newPerson.givenName = firstName;
     newPerson.phones = [ Item(label: "mobile", value: number) ];
@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           itemBuilder: (c, i){
             return ListTile(
               leading: Image.asset("assets/profile.png"),
-              title: Text(name[i].displayName),
+              title: Text(name[i].displayName ?? "이름 없음"),
               trailing: TextButton(
                 style: ButtonStyle(
                     shape: MaterialStateProperty.all<OutlinedBorder>(
