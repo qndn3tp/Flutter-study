@@ -120,21 +120,87 @@ class DialogUI extends StatelessWidget {
             children: [
               Text("  성  :"),
               SizedBox( width: 10,),
-              Flexible(child: TextField( controller: inputData1,),)
+              Flexible(
+                child: SizedBox(
+                  height: 50,
+                  child: TextField( controller: inputData1,
+                  decoration: InputDecoration(
+                    hintText: "성을 입력해주세요",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    // 기본 상태
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(25),),
+                    // 커서 찍혔을 때
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide( color: Colors.black12, width: 3,),
+                      borderRadius: BorderRadius.circular(25),),
+                  ),
+                ),
+                ),
+              )
             ],
+          ),
+          SizedBox(
+            height: 10,
           ),
           Row(
             children: [
               Text("이름:"),
               SizedBox( width: 10,),
-              Flexible(child: TextField( controller: inputData2,),)
+              Flexible(
+                child: SizedBox(
+                  height: 50,
+                  child: TextField( controller: inputData1,
+                    decoration: InputDecoration(
+                      hintText: "이름을 입력해주세요",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      // 기본 상태
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),),
+                      // 커서 찍혔을 때
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide( color: Colors.black12, width: 3,),
+                        borderRadius: BorderRadius.circular(25),),
+                    ),
+                  ),
+                ),
+              )
             ],
+          ),
+          SizedBox(
+            height: 10,
           ),
           Row(
             children: [
               Text("번호:"),
               SizedBox( width: 10,),
-              Flexible(child: TextField( controller: inputData3,),)
+              Flexible(
+                child: SizedBox(
+                  height: 50,
+                  child: TextField( controller: inputData1,
+                    decoration: InputDecoration(
+                      hintText: "번호를 입력해주세요",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      // 기본 상태
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),),
+                      // 커서 찍혔을 때
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide( color: Colors.black12, width: 3,),
+                        borderRadius: BorderRadius.circular(25),),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ],
@@ -152,10 +218,12 @@ class DialogUI extends StatelessWidget {
               if (inputData1.text.trim() != "") {
                 if (inputData2.text.trim() != "") {
                   if (inputData3.text.trim() != "") {
-                    addName(inputData1.text, inputData2.text, inputData3.text);
-                  }
-                }
-              }
+                    addName(inputData1.text, inputData2.text, inputData3.text);}}}
+              else {
+                showDialog(
+                    context: context,
+                    builder: (context){
+                      return AlertDialog( title: Text("성, 이름, 번호를 모두 입력해주세요"),);});}
               Navigator.pop(context);
             },
             )
